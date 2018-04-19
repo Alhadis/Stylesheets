@@ -1,0 +1,178 @@
+*{
+	tab-size: 4;
+	box-sizing: border-box;
+}
+	:focus{outline: none}
+
+
+
+/*=============================================================================*
+	1. ELEMENTS
+===============================================================================*/
+
+html{
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-feature-settings: "liga" 1, "calt" 1, "swsh" 1;
+}
+
+a:link,
+a:visited{
+	color: inherit;
+	text-decoration: none;
+}
+	a:hover{
+		text-decoration: underline;
+	}
+
+
+abbr[title]{
+	border: none;
+	text-decoration: none;
+}
+
+/** Headings */
+h1, h2, h3, h4, h5, h6{
+	margin: 0;
+}
+
+
+hr{
+	margin: .5em 0;
+	padding: 0;
+	border: 1px solid #555;
+	border-width: 1px 0 0;
+	clear: both;
+}
+
+
+/** Form elements */
+fieldset{
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+input[type="email"],
+textarea{
+
+}
+
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+button, .btn, a.btn{
+	
+}
+
+
+/*=============================================================================*
+	2. PROJECT-SPECIFIC
+===============================================================================*/
+
+
+/*=============================================================================*
+	3. COMPONENTS & WIDGETS
+===============================================================================*/
+
+.control{
+	display: none;
+}
+	.control[type="checkbox"]:checked    + .fold,
+	.control[type="radio"]:not(:checked) + .fold{
+		max-height: 0 !important;
+	}
+
+label, .disclosure{
+	cursor: pointer;
+	user-select: none;
+}
+
+.fold{
+	overflow: hidden;
+	transition: .3s ease max-height;
+}
+
+
+
+
+/*=============================================================================*
+	4. CLASSES
+===============================================================================*
+
+/** Structural classes */
+.centre{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 70em;
+}
+
+.nonvisual{
+	clip: rect(0 0 0 0);
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	position: absolute;
+	border: 0;
+	padding: 0;
+}
+
+.r/*eplaced elements (logos/text banners/etc) */{
+	background-repeat: no-repeat;
+	background-size: auto 100%;
+	display: inline-block;
+	vertical-align: top;
+	text-align: left !important;
+	text-indent: -99999px;
+	height: 1em;
+}
+
+.i/*con replacement (social links, etc) */{
+	display: inline-block;
+	vertical-align: top;
+	position: relative;
+	text-align: left;
+	text-indent: -999em;
+	font-style: normal;
+	font-size: 2em;
+	width:  1em;
+	height: 1em;
+}
+	.i::before{
+		font-family: AppIcons;
+		display: block;
+		position: absolute;
+		top:    0;
+		left:   0;
+		bottom: 0;
+		right:  0;
+		text-align: center;
+		text-indent: 0;
+	}
+
+
+
+
+/** List styles */
+ul.plain,
+ol.plain,
+.plain > li{
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+
+
+
+/** Forcefully hidden element */
+.hidden{
+	display: none !important;
+}
