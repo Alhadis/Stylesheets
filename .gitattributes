@@ -1,0 +1,2 @@
+# Mark as vendored anything I didn't write
+reset/normalize*.css linguist-vendored
