@@ -1,2 +1,3 @@
-# Mark as vendored anything I didn't write
+# Prevent stuff I didn't write from skewing language stats
 reset/normalize*.css linguist-vendored
+**/manpage/*.html linguist-documentation

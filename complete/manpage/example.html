@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="initial-scale=1, minimum-scale=1" />
+<title>mandoc(1) &mdash; OpenBSD manaul pages</title>
+
+<link rel="stylesheet" type="text/css" href="../../reset/normalize.min.css" />
+<link rel="stylesheet" type="text/css" href="manpage.css" />
+</head>
+
+
+<body>
+	<header title="mandoc(1)">
+		<h1>mandoc(1)</h1>
+		<p>General Commands Manual</p>
+	</header>
+
+	<section id="name">
+		<h2>Name</h2>
+		<dfn>mandoc</dfn> &mdash; format manual pages
+	</section>
+
+	<section id="synopsis">
+		<h2>Synopsis</h2>
+		<div class="synopsis">
+			<dfn>mandoc</dfn>
+			<ul class="options">
+				<li>[<kbd>-ac</kbd>]</li>
+				<li>[<kbd>-I os</kbd>=<var>name</var>]</li>
+				<li>[<kbd>-K</kbd> <var>encoding</var>]</li>
+				<li>[<kbd>-mdoc</kbd> | <kbd>-man</kbd>]</li>
+				<li>[<kbd>-O</kbd> <var>options</var>]</li>
+				<li>[<kbd>-T</kbd> <var>output</var>]</li>
+				<li>[<kbd>-W</kbd> <var>level</var>]</li>
+				<li>[<kbd>file</kbd> <var>&hellip;</var>]</li>
+			</ul>
+		</div>
+	</section>
+
+	<section id="description">
+		<h2>Description</h2>
+		<p>The <dfn>mandoc</dfn> utility formats UNIX manual pages for display.</p>
+		<p>By default, <dfn>mandoc</dfn> reads <a href="man://mdoc/7"><code>mdoc</code>(7)</a> or <a href="man://man/7">man(7)</a> text from <abbr title="standard input">stdin</abbr> and produces <kbd>-T locale</kbd> output.</p>
+		<p>The options are as follows:</p>
+		<dl>
+			<dt><kbd>-a</kbd></dt>
+			<dd>If the standard output is a terminal device and <kbd>-c</kbd> is not specified, use <a href="man://more/1">more(1)</a> to paginate the output, just like <a href="man://man/1">man(1)</a> would.</dd>
+
+			<dt><kbd>-c</kbd></dt>
+			<dd>Copy the formatted manual pages to the standard output without using <a href="man://more/1">more(1)</a> to paginate them. This is the default. It can be specified to override <kbd>-a</kbd>.</dd>
+			
+			<dt><kbd>-I os</kbd>=<var>name</var></dt>
+			<dd>Override the default operating system name for the <a href="man://mdoc/7">mdoc(7)</a> <abbr><code>Os</code></abbr> and for the <a href="man://man/7">man(7)</a> <abbr><code>TH</code></abbr> macro.</dd>
+			
+			<dt><kbd>-K</kbd> <var>encoding</var></dt>
+			<dd>
+				<p>Specify the input encoding. The supported encoding arguments are <code>us-ascii</code>, <code>iso-8859-1</code>, and <code>utf-8</code>. If not specified, autodetection uses the first match in the following list:</p>
+				<ol>
+					<li>If the first three bytes of the input file are the UTF-8 byte-order mark (<abbr title="Byte-order Mark">BOM</abbr>, <samp>0xefbbbf</samp>), input is interpreted as <code>utf-8</code>.</li>
+					<li>If the first or second line of the input file matches the <b>Emacs</b> mode line format <pre><code>.\" -*- [&hellip;;] coding: <var>encoding</var>; -*-</code></pre> then input is interpreted according to encoding.</li>
+					<li>If the first non-ASCII byte in the file introduces a valid UTF-8 sequence, input is interpreted as <code>utf-8</code>.</li>
+					<li>Otherwise, input is interpreted as <code>iso-8859-1</code>.</li>
+				</ol>
+			</dd>
+			
+			<dt><kbd>-mdoc</kbd> | <kbd>-man</kbd></dt>
+			<dd>With <kbd>-mdoc</kbd>, all input files are interpreted as <a href="man://mdoc/7">mdoc(7)</a>. With <kbd>-man</kbd>, all input files are interpreted as <a href="man://man/7">man(7)</a>. By default, the input language is automatically detected for each file: if the first macro is <abbr><code>Dd</code></abbr> or <abbr><code>Dt</code></abbr>, the <a href="man://mdoc/7">mdoc(7)</a> parser is used; otherwise, the <a href="man://man/7">man(7)</a> parser is used. With other arguments, <kbd>-m</kbd> is silently ignored.</dd>
+			
+			<dt><kbd>-O</kbd> <var>options</var></dt>
+			<dd>Comma-separated output options.</dd>
+			
+			<dt><kbd>-T</kbd> <var>output</var></dt>
+			<dd>Output format. See <a href="#output-formats">Output Formats</a> for available formats. Defaults to <code>-T locale</code>.</dd>
+			
+			<dt><kbd>-W</kbd> <var>level</var></dt>
+			<dd>
+				<p>
+					Specify the minimum message <var>level</var> to be reported on the standard error output and to affect the exit status.
+					The <var>level</var> can be <code>base</code>, <code>style</code>, <code>warning</code>, <code>error</code>, or <code>unsupp</code>.
+					The base level automatically derives the operating system from the contents of the <abbr><code>Os</code></abbr> macro, from the <kbd>-Ios</kbd> command line option, or from the <a href="man://uname/3">uname(3)</a> return value.
+					The levels <code>openbsd</code> and <code>netbsd</code> are variants of <code>base</code> that bypass autodetection and request validation of base system conventions for a particular operating system.
+					The level <code>all</code> is an alias for <code>base</code>.
+					By default, <dfn>mandoc</dfn> is silent.
+					See <a href="#exit-status">Exit status</a>.
+				</p>
+				<p>
+					The special option <kbd>-W stop</kbd> tells <dfn>mandoc</dfn> to exit after parsing a file that causes warnings or errors of at least the requested level.
+					No formatted output will be produced from that file. If both a level and stop are requested, they can be joined with a comma, for example <kbd>-W error,stop</kbd>.
+				</p>
+			</dd>
+			
+			<dt><kbd>file</kbd></dt>
+			<dd>Read input from zero or more files. If unspecified, reads from <abbr title="standard input">stdin</abbr>. If multiple files are specified, <dfn>mandoc</dfn> will halt with the first failed parse.</dd>
+		</dl>
+		<p>The options <kbd>-fhklw</kbd> are also supported and are documented in <a href="man://man/1">man(1)</a>. In <kbd>-f</kbd> and <kbd>-k</kbd> mode, <dfn>mandoc</dfn> also supports the options <kbd>-CMmOSs</kbd> described in the <a href="man://apropos/1">apropos(1)</a> manual. The options <kbd>-fkl</kbd> are mutually exclusive and override each other.</p>
+
+		<div id="output-formats">
+			<h3>Output formats</h3>
+			<p>The mandoc utility accepts the following -T arguments, which correspond to output modes:</p>
+			<dl>
+				<dt><kbd>-T ascii</kbd></dt>
+				<dd>Produce 7-bit ASCII output. See <a href="#ascii-output">ASCII Output</a>.</dd>
+				
+				<dt><kbd>-T html</kbd></dt>
+				<dd>Produce HTML5, CSS1, and MathML output. See <a href="#html-output">HTML Output</a>.</dd>
+
+				<dt><kbd>-T lint</kbd></dt>
+				<dd>Parse only: produce no output. Implies <kbd>-W all</kbd> and redirects parser messages, which usually appear on standard error output, to standard output.</dd>
+
+				<dt><kbd>-T locale</kbd></dt>
+				<dd>Encode output using the current locale. This is the default. See <a href="#locale-output">Locale Output</a>.</dd>
+
+				<dt><kbd>-T man</kbd></dt>
+				<dd>Produce <a href="man://man/7">man(7)</a> format output. See <a href="#man-output">Man Output</a>.</dd>
+
+				<dt><kbd>-T markdown</kbd></dt>
+				<dd>Produce output in markdown format. See <a href="#markdown-output">Markdown Output</a>.</dd>
+
+				<dt><kbd>-T pdf</kbd></dt>
+				<dd>Produce PDF output. See <a href="#pdf-output">PDF Output</a>.</dd>
+
+				<dt><kbd>-T ps</kbd></dt>
+				<dd>Produce PostScript output. See <a href="#postscript-output">PostScript Output</a>.</dd>
+
+				<dt><kbd>-T tree</kbd></dt>
+				<dd>Produce an indented parse tree. See <a href="#syntax-tree-output">Syntax tree output</a>.</dd>
+
+				<dt><kbd>-T utf8</kbd></dt>
+				<dd>Encode output in the UTF-8 multi-byte format. See <a href="#utf8-output">UTF-8 Output</a>.</dd>
+			</dl>
+			<p>If multiple input files are specified, these will be processed by the corresponding filter in-order.</p>
+		</div>
+
+		<div id="ascii-output">
+			<h3>ASCII output</h3>
+			<p>Output produced by <kbd>-T ascii</kbd> is rendered in standard 7-bit ASCII documented in <a href="man://ascii/7">ascii(7)</a>.</p>
+			<p>Font styles are applied by using back-spaced encoding such that an underlined character <code>c</code> is rendered as <samp>_\[bs]c</samp>, where <code>\[bs]</code> is the back-space character number 8. Emboldened characters are rendered as <samp>c\[bs]c</samp>.</p>
+			<p>The special characters documented in <a href="man://mandoc_char/7">mandoc_char(7)</a> are rendered best-effort in an ASCII equivalent.</p>
+			<p>The following <kbd>-O</kbd> arguments are accepted:</p>
+			<dl>
+				<dt><kbd>indent</kbd>=<var>indent</var></dt>
+				<dd>The left margin for normal text is set to <var>indent</var> blank characters instead of the default of five for <a href="man://mdoc/7">mdoc(7)</a> and seven for <a href="man://man/7">man(7)</a>. Increasing this is not recommended; it may result in degraded formatting, for example overfull lines or ugly line breaks. When output is to a pager on a terminal that is less than 66 columns wide, the default is reduced to three columns.</dd>
+
+				<dt><kbd>mdoc</kbd></dt>
+				<dd>Format <a href="man://man/7">man(7)</a> input files in <a href="man://mdoc/7">mdoc(7)</a> output style. Specifically, this suppresses the two additional blank lines near the top and the bottom of each page, and it implies <kbd>-O indent</kbd>=<code>5</code>. One useful application is for checking that <kbd>-T man</kbd> output formats in the same way as the <a href="man://mdoc/7">mdoc(7)</a> source it was generated from.</dd>
+
+				<dt><kbd>width</kbd>=<var>width</var></dt>
+				<dd>The output width is set to <var>width</var> instead of the default of 78. When output is to a pager on a terminal that is less than 79 columns wide, the default is reduced to one less than the terminal width. In any case, lines that are output in literal mode are never wrapped and may exceed the output width.</dd>
+			</dl>
+		</div>
+
+		<div id="html-output">
+			<h3>HTML output</h3>
+			<p>Output produced by <kbd>-T html</kbd> conforms to HTML5 using optional self-closing tags. Default styles use only CSS1. Equations rendered from <a href="man://eqn/7">eqn(7)</a> blocks use MathML.</p>
+			<p>The <var>mandoc.css</var> file documents style-sheet classes available for customising output. If a style-sheet is not specified with <kbd>-O style</kbd>, <kbd>-T html</kbd> defaults to simple output (via an embedded style-sheet) readable in any graphical or text-based web browser.</p>
+			<p>Special characters are rendered in decimal-encoded UTF-8.</p>
+			<p>The following <kbd>-O</kbd> arguments are accepted:</p>
+			<dl>
+				<dt><kbd>fragment</kbd></dt>
+				<dd>Omit the <code>&lt;!DOCTYPE&gt;</code> declaration and the <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, and <code>&lt;body&gt;</code> elements and only emit the subtree below the <code>&lt;body&gt;</code> element. The style argument will be ignored. This is useful when embedding manual content within existing documents.</dd>
+			
+				<dt><kbd>includes</kbd>=<var>fmt</var></dt>
+				<dd>The string <var>fmt</var>, for example, <code>../src/%I.html</code>, is used as a template for linked header files (usually via the <abbr><code>In</code></abbr> macro). Instances of <code>%I</code> are replaced with the include filename. The default is not to present a hyperlink.</dd>
+
+				<dt><kbd>man</kbd>=<var>fmt</var></dt>
+				<dd>The string <var>fmt</var>, for example, <code>../html%S/%N.%S.html</code>, is used as a template for linked manuals (usually via the <abbr><code>Xr</code></abbr> macro). Instances of <code>%N</code> and <code>%S</code> are replaced with the linked manual&rsquo;s name and section, respectively. If no section is included, section 1 is assumed. The default is not to present a hyperlink.</dd>
+
+				<dt><kbd>style</kbd>=<var>style.css</var></dt>
+				<dd>The file <var>style.css</var> is used for an external style-sheet. This must be a valid absolute or relative URI.</dd>
+			</dl>
+		</div>
+
+		<div id="locale-output">
+			<h3>Locale output</h3>
+			<p>Locale-depending output encoding is triggered with <kbd>-T locale</kbd>. This is the default.</p>
+			<p>This option is not available on all systems: systems without locale support, or those whose internal representation is not natively UCS-4, will fall back to <kbd>-T ascii</kbd>. See <a href="#ascii-output">ASCII Output</a> for font style specification and available command-line arguments.</p>
+		</div>
+
+		<div id="man-output">
+			<h3>Man output</h3>
+			<p>Translate input format into <a href="man://man/7">man(7)</a> output format. This is useful for distributing manual sources to legacy systems lacking <a href="man://mdoc/7">mdoc(7)</a> formatters.</p>
+			<p>If <a href="man://mdoc/7">mdoc(7)</a> is passed as input, it is translated into <a href="man://man/7">man(7)</a>. If the input format is <a href="man://man/7">man(7)</a>, the input is copied to the output, expanding any <a href="man://roff/7">roff(7)</a> <abbr><code>so</code></abbr> requests. The parser is also run, and as usual, the <kbd>-W</kbd> level controls which <a href="#diagnostics">diagnostics</a> are displayed before copying the input to the output.</p>
+		</div>
+
+		<div id="markdown-output">
+			<h3>Markdown output</h3>
+			<p>Translate <a href="man://mdoc/7">mdoc(7)</a> input to the markdown format conforming to John Gruber&rsquo;s 2004 specification. The output also almost conforms to the CommonMark specification.</p>
+			<p>The character set used for the markdown output is ASCII. Non-ASCII characters are encoded as HTML entities. Since that is not possible in literal font contexts, because these are rendered as code spans and code blocks in the markdown output, non-ASCII characters are transliterated to ASCII approximations in these contexts.</p>
+			<p>Markdown is a very weak markup language, so all semantic markup is lost, and even part of the presentational markup may be lost. Do not use this as an intermediate step in converting to HTML; instead, use <kbd>-T html</kbd> directly.</p>
+			<p>The <a href="man://man/7">man(7)</a>, <a href="man://tbl/7">tbl(7)</a>, and <a href="man://eqn/7">eqn(7)</a> input languages are not supported by <kbd>-T markdown</kbd> output mode.</p>
+		</div>
+
+		<div id="pdf-output">
+			<h3>PDF output</h3>
+			<p>PDF-1.1 output may be generated by <kbd>-T pdf</kbd>. See <a href="#postscript-output">PostScript output</a> for <kbd>-O arguments</kbd> and defaults.</p>
+		</div>
+
+		<div id="postscript-output">
+			<h3>PostScript output</h3>
+			<p>PostScript &ldquo;Adobe-3.0&rdquo; Level-2 pages may be generated by <kbd>-T ps</kbd>. Output pages default to letter sized and are rendered in the Times font family, 11-point. Margins are calculated as 1/9 the page length and width. Line-height is 1.4m.</p>
+			<p>Special characters are rendered as in <a href="#ascii-output">ASCII output</a>.</p>
+			<p>The following <kbd>-O</kbd> arguments are accepted:</p>
+			<dl>
+				<dt><kbd>paper</kbd>=<var>name</var></dt>
+				<dd>The paper size <var>name</var> may be one of <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>legal</code>, or <code>letter</code>. You may also manually specify dimensions as <code><abbr>NNxNN</abbr></code>, width by height in millimetres. If an unknown value is encountered, <code>letter</code> is used.</dd>
+			</dl>
+		</div>
+
+		<div id="utf8-output">
+			<h3>UTF-8 output</h3>
+			<p>Use <kbd>-T utf8</kbd> to force a UTF-8 locale. See <a href="#locale-output">Locale output</a> for details and options.</p>
+		</div>
+
+		<div id="syntax-tree-output">
+			<h3>Syntax tree output</h3>
+			<p>Use <kbd>-T tree</kbd> to show a human readable representation of the syntax tree. It is useful for debugging the source code of manual pages. The exact format is subject to change, so don't write parsers for it.</p>
+			<p>The first paragraph shows meta data found in the <a href="man://mdoc/7">mdoc(7)</a> prologue, on the <a href="man://man/7">man(7)</a> <abbr><code>TH</code></abbr> line, or the fallbacks used.</p>
+			<p>In the tree dump, each output line shows one syntax tree node. Child nodes are indented with respect to their parent node. The columns are:</p>
+			<ol>
+				<li>For macro nodes, the macro name; for text and <a href="man://tbl/7">tbl(7)</a> nodes, the content. There is a special format for <a href="man://eqn/7">eqn(7)</a> nodes.</li>
+				<li>Node type (<code>text</code>, <code>elem</code>, <code>block</code>, <code>head</code>, <code>body</code>, <code>body-end</code>, <code>tail</code>, <code>tbl</code>, <code>eqn</code>).</li>
+				<li>
+					Flags:
+					<ul>
+						<li>An opening parenthesis if the node is an opening delimiter.</li>
+						<li>An asterisk if the node starts a new input line.</li>
+						<li>The input line number (starting at one).</li>
+						<li>A colon.</li>
+						<li>The input column number (starting at one).</li>
+						<li>A closing parenthesis if the node is a closing delimiter.</li>
+						<li>A full stop if the node ends a sentence.</li>
+						<li><samp>BROKEN</samp> if the node is a block broken by another block.</li>
+						<li><samp>NOSRC</samp> if the node is not in the input file, but automatically generated from macros.</li>
+						<li><samp>NOPRT</samp> if the node is not supposed to generate output for any output format.</li>
+					</ul>
+				</li>
+			</ol>
+			<p>The following <kbd>-O</kbd> argument is accepted:</p>
+			<dl>
+				<dt><kbd>noval</kbd></dt>
+				<dd>Skip validation and show the unvalidated syntax tree. This can help to find out whether a given behaviour is caused by the parser or by the validator. Meta data is not available in this case.</dd>
+			</dl>
+		</div>
+	</section>
+
+	<section id="environment">
+		<h2>Environment</h2>
+		<dl>
+			<dt><var>MANPAGER</var></dt>
+			<dd>Any non-empty value of the environment variable <var>MANPAGER</var> is used instead of the standard pagination program, <a href="man://more/1">more(1)</a>; see <a href="man://man/1">man(1)</a> for details. Only used if <kbd>-a</kbd> or <kbd>-l</kbd> is specified.</dd>
+
+			<dt><var>PAGER</var></dt>
+			<dd>Specifies the pagination program to use when <var>MANPAGER</var> is not defined. If neither <var>PAGER</var> nor <var>MANPAGER</var> is defined, <a href="man://more/1">more(1)</a> <kbd>-s</kbd> is used. Only used if <kbd>-a</kbd> or <kbd>-l</kbd> is specified.</dd>
+		</dl>
+	</section>
+
+	<section id="exit-status">
+		<h2>Exit status</h2>
+		<p>The <dfn>mandoc</dfn> utility exits with one of the following values, controlled by the message <var>level</var> associated with the <kbd>-W</kbd> option:
+		<dl>
+			<dt>0</dt><dd>No base system convention violations, style suggestions, warnings, or errors occurred, or those that did were ignored because they were lower than the requested <var>level</var>.</dd>
+			<dt>1</dt><dd>At least one base system convention violation or style suggestion occurred, but no warning or error, and <kbd>-W base</kbd> or <kbd>-W style</kbd> was specified.</dd>
+			<dt>2</dt><dd>At least one warning occurred, but no error, and <kbd>-W warning</kbd> or a lower <var>level</var> was requested.</dd>
+			<dt>3</dt><dd>At least one parsing error occurred, but no unsupported feature was encountered, and <kbd>-W error</kbd> or a lower <var>level</var> was requested.</dd>
+			<dt>4</dt><dd>At least one unsupported feature was encountered, and <kbd>-W unsupp</kbd> or a lower <var>level</var> was requested.</dd>
+			<dt>5</dt><dd>Invalid command line arguments were specified. No input files have been read.</dd>
+			<dt>6</dt><dd>An operating system error occurred, for example exhaustion of memory, file descriptors, or process table entries. Such errors cause <dfn>mandoc</dfn> to exit at once, possibly in the middle of parsing or formatting a file.</dd>
+		</dl>
+		<p>Note that selecting <kbd>-T lint</kbd> output mode implies <kbd>-W all</kbd>.</p>
+	</section>
+
+	<section id="examples">
+		<h2>Examples</h2>
+		<figure>
+			<figcaption>To page manuals to the terminal:</figcaption>
+			<pre><samp><span class="prompt">$ </span><kbd>mandoc -l mandoc.1 man.1 apropos.1 makewhatis.8</kbd></samp></pre>
+		</figure>
+		<figure>
+			<figcaption>To produce HTML manuals with mandoc.css as the style-sheet:</figcaption>
+			<pre><samp><span class="prompt">$ </span><kbd>mandoc -T html -O style=mandoc.css mdoc.7 &gt; mdoc.7.html</kbd></samp></pre>
+		</figure>
+		<figure>
+			<figcaption>To check over a large set of manuals:</figcaption>
+			<pre><samp><span class="prompt">$ </span><kbd>mandoc -T lint `find /usr/src -name \*\.[1-9]`</kbd></samp></pre>
+		</figure>
+		<figure>
+			<figcaption>To produce a series of PostScript manuals for A4 paper:</figcaption>
+			<pre><samp><span class="prompt">$ </span><kbd>mandoc -T ps -O paper=a4 mdoc.7 man.7 &gt; manuals.ps</kbd></samp></pre>
+		</figure>
+		<figure>
+			<figcaption>Convert a modern <a href="man://mdoc/7">mdoc(7)</a> manual to the older <a href="man://man/7">man(7)</a> format, for use on systems lacking an <a href="man://mdoc/7">mdoc(7)</a> parser:</figcaption>
+			<pre><samp><span class="prompt">$ </span><kbd>mandoc -T man foo.mdoc &gt; foo.man</kbd></samp></pre>
+		</figure>
+	</section>
+
+	<section id="diagnostics">
+		<h2>Diagnostics</h2>
+		<p>Messages displayed by <dfn>mandoc</dfn> follow this format:</p>
+		<pre><samp><dfn>mandoc:</dfn> <var>file</var>:<var>line</var>:<var>column</var>: <var>level</var>: <var>message</var>: <var>macro</var> <var>args</var> (<var>os</var>)</samp></pre>
+		<p>Line and column numbers start at 1. Both are omitted for messages referring to an input file as a whole. Macro names and arguments are omitted where meaningless. The <var>os</var> operating system specifier is omitted for messages that are relevant for all operating systems. Fatal messages about invalid command line arguments or operating system errors, for example when memory is exhausted, may also omit the <var>file</var> and <var>level</var> fields.</p>
+		<p>Message levels have the following meanings:</p>
+		<dl>
+			<dt><samp>unsupp</samp></dt>
+			<dd>An input file uses unsupported low-level <a href="man://roff/7">roff(7)</a> features. The output may be incomplete and/or misformatted, so using <abbr>GNU</abbr> troff instead of <dfn>mandoc</dfn> to process the file may be preferable.</dd>
+
+			<dt><samp>error</samp></dt>
+			<dd>Indicates a risk of information loss or severe misformatting, in most cases caused by serious syntax errors.</dd>
+
+			<dt><samp>warning</samp></dt>
+			<dd>Indicates a risk that the information shown or its formatting may mismatch the author's intent in minor ways. Additionally, syntax errors are classified at least as warnings, even if they do not usually cause misformatting.</dd>
+
+			<dt><samp>style</samp></dt>
+			<dd>An input file uses dubious or discouraged style. This is not a complaint about the syntax, and probably neither formatting nor portability are in danger. While great care is taken to avoid false positives on the higher message levels, the style level tries to reduce the probability that issues go unnoticed, so it may occasionally issue bogus suggestions. Please use your good judgement to decide whether any particular style suggestion really justifies a change to the input file.</dd>
+
+			<dt><samp>base</samp></dt>
+			<dd>A convention used in the base system of a specific operating system is not adhered to. These are not markup mistakes, and neither the quality of formatting nor portability are in danger. Messages of the base level are printed with the more intuitive style level tag.</dd>
+		</dl>
+		<p>Messages of the <samp>base</samp>, <samp>style</samp>, <samp>warning</samp>, <samp>error</samp>, and <samp>unsupp</samp> levels except those about non-existent or unreadable input files are hidden unless their level, or a lower level, is requested using a <kbd>-W</kbd> option or <kbd>-T lint</kbd> output mode.</p>
+		<p>As indicated below, all <samp>base</samp> and <samp>some</samp> style checks are only performed if a specific operating system name occurs in the arguments of the <kbd>-W</kbd> command line option, of the <abbr><code>Os</code></abbr> macro, of the <kbd>-Ios</kbd> command line option, or, if neither are present, in the return value of the <a href="man://uname/3">uname(3)</a> function.</p>
+
+		<div id="conventions-for-base-system-manuals">
+			<h3>Conventions for base system manuals</h3>
+			<dl>
+				<dt><samp>Mdocdate found</samp></dt>
+				<dd>(mdoc, NetBSD) The <abbr><code>Dd</code></abbr> macro uses <abbr>CVS</abbr> <code>Mdocdate</code> keyword substitution, which is not supported by the NetBSD base system. Consider using the conventional &ldquo;Month dd, yyyy&rdquo; format instead.</dd>
+
+				<dt><samp>Mdocdate missing</samp></dt>
+				<dd>(mdoc, OpenBSD) The <abbr><code>Dd</code></abbr> macro does not use <abbr>CVS</abbr> <code>Mdocdate</code> keyword substitution, but using it is conventionally expected in the OpenBSD base system.</dd>
+
+				<dt><samp>unknown architecture</samp></dt>
+				<dd>(mdoc, OpenBSD, NetBSD) The third argument of the <abbr><code>Dt</code></abbr> macro does not match any of the architectures this operating system is running on.</dd>
+
+				<dt><samp>operating system explicitly specified</samp></dt>
+				<dd>(mdoc, OpenBSD, NetBSD) The <abbr><code>Os</code></abbr> macro has an argument. In the base system, it is conventionally left blank.</dd>
+
+				<dt><samp>RCS id missing</samp></dt>
+				<dd>(OpenBSD, NetBSD) The manual page lacks the comment line with the <abbr>RCS</abbr> identifier generated by <abbr>CVS</abbr> OpenBSD or NetBSD keyword substitution as conventionally used in these operating systems.</dd>
+
+				<dt><samp>referenced manual not found</samp></dt>
+				<dd>(mdoc) An <abbr><code>Xr</code></abbr> macro references a manual page that is not found in the base system. The path to look for base system manuals is configurable at compile time and defaults to <code>/usr/share/man: /usr/X11R6/man</code>.</dd>
+			</dl>
+		</div>
+
+		<div id="style-suggestions">
+			<h3>Style suggestions</h3>
+			<dl>
+				<dt><samp>legacy man(7) date format</samp></dt>
+				<dd>(mdoc) The <abbr><code>Dd</code></abbr> macro uses the legacy <a href="man://man/7">man(7)</a> date format &ldquo;yyyy-dd-mm&rdquo;. Consider using the conventional <a href="man://mdoc/7">mdoc(7)</a> date format &ldquo;Month dd, yyyy&rdquo; instead.</dd>
+
+				<dt><samp>lower case character in document title</samp></dt>
+				<dd>(mdoc, man) The title is still used as given in the <abbr><code>Dt</code></abbr> or <abbr><code>TH</code></abbr> macro.</dd>
+
+				<dt><samp>duplicate RCS id</samp></dt>
+				<dd>A single manual page contains two copies of the <abbr>RCS</abbr> identifier for the same operating system. Consider deleting the later instance and moving the first one up to the top of the page.</dd>
+
+				<dt><samp>possible typo in section name</samp></dt>
+				<dd>(mdoc) Fuzzy string matching revealed that the argument of an <abbr><code>Sh</code></abbr> macro is similar, but not identical to a standard section name.</dd>
+
+				<dt><samp>unterminated quoted argument</samp></dt>
+				<dd>(roff) Macro arguments can be enclosed in double quote characters such that space characters and macro names contained in the quoted argument need not be escaped. The closing quote of the last argument of a macro can be omitted. However, omitting it is not recommended because it makes the code harder to read.</dd>
+
+				<dt><samp>useless macro</samp></dt>
+				<dd>(mdoc) A <abbr><code>Bt</code></abbr>, <abbr><code>Tn</code></abbr>, or <abbr><code>Ud</code></abbr> macro was found. Simply delete it: it serves no useful purpose.</dd>
+
+				<dt><samp>consider using OS macro</samp></dt>
+				<dd>(mdoc) A string was found in plain text or in a <abbr><code>Bx</code></abbr> macro that could be represented using <abbr><code>Ox</code></abbr>, <abbr><code>Nx</code></abbr>, <abbr><code>Fx</code></abbr>, or <abbr><code>Dx</code></abbr>.</dd>
+
+				<dt><samp>errnos out of order</samp></dt>
+				<dd>(mdoc, NetBSD) The <abbr><code>Er</code></abbr> items in a <abbr><code>Bl</code></abbr> list are not in alphabetical order.</dd>
+
+				<dt><samp>duplicate errno</samp></dt>
+				<dd>(mdoc, NetBSD) A <abbr><code>Bl</code></abbr> list contains two consecutive It entries describing the same <abbr><code>Er</code></abbr> number.</dd>
+
+				<dt><samp>trailing delimiter</samp></dt>
+				<dd>(mdoc) The last argument of an <abbr><code>Ex</code></abbr>, <abbr><code>Fo</code></abbr>, <abbr><code>Nd</code></abbr>, <abbr><code>Nm</code></abbr>, <abbr><code>Os</code></abbr>, <abbr><code>Sh</code></abbr>, <abbr><code>Ss</code></abbr>, <abbr><code>St</code></abbr>, or <abbr><code>Sx</code></abbr> macro ends with a trailing delimiter. This is usually bad style and often indicates typos. Most likely, the delimiter can be removed.</dd>
+
+				<dt><samp>no blank before trailing delimiter</samp></dt>
+				<dd>(mdoc) The last argument of a macro that supports trailing delimiter arguments is longer than one byte and ends with a trailing delimiter. Consider inserting a blank such that the delimiter becomes a separate argument, thus moving it out of the scope of the macro.</dd>
+
+				<dt><samp>fill mode already enabled, skipping</samp></dt>
+				<dd>(man) A <abbr><code>fi</code></abbr> request occurs even though the document is still in fill mode, or already switched back to fill mode. It has no effect.</dd>
+
+				<dt><samp>fill mode already disabled, skipping</samp></dt>
+				<dd>(man) An <abbr><code>nf</code></abbr> request occurs even though the document already switched to no-fill mode and did not switch back to fill mode yet. It has no effect.</dd>
+
+				<dt><samp>verbatim "--", maybe consider using \(em</samp></dt>
+				<dd>(mdoc) Even though the ASCII output device renders an em-dash as <samp>--</samp>, that is not a good way to write it in an input file because it renders poorly on all other output devices.</dd>
+
+				<dt><samp>function name without markup</samp></dt>
+				<dd>(mdoc) A word followed by an empty pair of parentheses occurs on a text line. Consider using an <abbr><code>Fn</code></abbr> or <abbr><code>Xr</code></abbr> macro.</dd>
+
+				<dt><samp>whitespace at end of input line</samp></dt>
+				<dd>(mdoc, man, roff) Whitespace at the end of input lines is almost never semantically significant &mdash; but in the odd case where it might be, it is extremely confusing when reviewing and maintaining documents.</dd>
+
+				<dt><samp>bad comment style</samp></dt>
+				<dd>(roff) Comment lines start with a dot, a backslash, and a double-quote character. The <dfn>mandoc</dfn> utility treats the line as a comment line even without the backslash, but leaving out the backslash might not be portable.</dd>
+			</dl>
+		</div>
+		
+		<div id="warnings-related-to-the-document-prologue">
+			<h3>Warnings related to the document prologue</h3>
+			<dl>
+				<dt><samp>missing manual title, using UNTITLED</samp></dt>
+				<dd>(mdoc) A Dt macro has no arguments, or there is no Dt macro before the first non-prologue macro.</dd>
+
+				<dt><samp>missing manual title, using ""</samp></dt>
+				<dd>(man) There is no TH macro, or it has no arguments.</dd>
+
+				<dt><samp>missing manual section, using ""</samp></dt>
+				<dd>(mdoc, man) A Dt or TH macro lacks the mandatory section argument.</dd>
+
+				<dt><samp>unknown manual section</samp></dt>
+				<dd>(mdoc) The section number in a Dt line is invalid, but still used.</dd>
+
+				<dt><samp>missing date, using today's date</samp></dt>
+				<dd>(mdoc, man) The document was parsed as mdoc(7) and it has no Dd macro, or the Dd macro has no arguments or only empty arguments; or the document was parsed as man(7) and it has no TH macro, or the TH macro has less than three arguments or its third argument is empty.</dd>
+
+				<dt><samp>cannot parse date, using it verbatim</samp></dt>
+				<dd>(mdoc, man) The date given in a Dd or TH macro does not follow the conventional format.</dd>
+
+				<dt><samp>date in the future, using it anyway</samp></dt>
+				<dd>(mdoc, man) The date given in a Dd or TH macro is more than a day ahead of the current system time(3).</dd>
+
+				<dt><samp>missing Os macro, using ""</samp></dt>
+				<dd>(mdoc) The default or current system is not shown in this case.</dd>
+
+				<dt><samp>late prologue macro</samp></dt>
+				<dd>(mdoc) A Dd or Os macro occurs after some non-prologue macro, but still takes effect.</dd>
+
+				<dt><samp>prologue macros out of order</samp></dt>
+				<dd>(mdoc) The prologue macros are not given in the conventional order Dd, Dt, Os. All three macros are used even when given in another order.</dd>
+			</dl>
+		</div>
+
+		<div id="warnings-regarding-document-structure">
+			<h3>Warnings regarding document structure</h3>
+			<dl>
+				<dt><samp>.so is fragile, better use ln(1)</samp></dt>
+				<dd>(roff) Including files only works when the parser program runs with the correct current working directory.</dd>
+
+				<dt><samp>no document body</samp></dt>
+				<dd>(mdoc, man) The document body contains neither text nor macros. An empty document is shown, consisting only of a header and a footer line.</dd>
+
+				<dt><samp>content before first section header</samp></dt>
+				<dd>(mdoc, man) Some macros or text precede the first Sh or SH section header. The offending macros and text are parsed and added to the top level of the syntax tree, outside any section block.</dd>
+
+				<dt><samp>first section is not NAME</samp></dt>
+				<dd>(mdoc) The argument of the first Sh macro is not ‘NAME’. This may confuse makewhatis(8) and apropos(1).</dd>
+
+				<dt><samp>NAME section without Nm before Nd</samp></dt>
+				<dd>(mdoc) The NAME section does not contain any Nm child macro before the first Nd macro.</dd>
+
+				<dt><samp>NAME section without description</samp></dt>
+				<dd>(mdoc) The NAME section lacks the mandatory Nd child macro.</dd>
+
+				<dt><samp>description not at the end of NAME</samp></dt>
+				<dd>(mdoc) The NAME section does contain an Nd child macro, but other content follows it.</dd>
+
+				<dt><samp>bad NAME section content</samp></dt>
+				<dd>(mdoc) The NAME section contains plain text or macros other than Nm and Nd.</dd>
+
+				<dt><samp>missing comma before name</samp></dt>
+				<dd>(mdoc) The NAME section contains an Nm macro that is neither the first one nor preceded by a comma.</dd>
+
+				<dt><samp>missing description line, using ""</samp></dt>
+				<dd>(mdoc) The Nd macro lacks the required argument. The title line of the manual will end after the dash.</dd>
+
+				<dt><samp>description line outside NAME section</samp></dt>
+				<dd>(mdoc) An Nd macro appears outside the NAME section. The arguments are printed anyway and the following text is used for apropos(1), but none of that behaviour is portable.</dd>
+
+				<dt><samp>sections out of conventional order</samp></dt>
+				<dd>(mdoc) A standard section occurs after another section it usually precedes. All section titles are used as given, and the order of sections is not changed.</dd>
+
+				<dt><samp>duplicate section title</samp></dt>
+				<dd>(mdoc) The same standard section title occurs more than once.</dd>
+				
+				<dt><samp>unexpected section</samp></dt>
+				<dd>(mdoc) A standard section header occurs in a section of the manual where it normally isn't useful.</dd>
+
+				<dt><samp>cross reference to self</samp></dt>
+				<dd>(mdoc) An Xr macro refers to a name and section matching the section of the present manual page and a name mentioned in an Nm macro in the NAME or SYNOPSIS section, or in an Fn or Fo macro in the SYNOPSIS. Consider using Nm or Fn instead of Xr.</dd>
+
+				<dt><samp>unusual Xr order</samp></dt>
+				<dd>(mdoc) In the SEE ALSO section, an Xr macro with a lower section number follows one with a higher number, or two Xr macros referring to the same section are out of alphabetical order.</dd>
+
+				<dt><samp>unusual Xr punctuation</samp></dt>
+				<dd>(mdoc) In the SEE ALSO section, punctuation between two Xr macros differs from a single comma, or there is trailing punctuation after the last Xr macro.</dd>
+
+				<dt><samp>AUTHORS section without An macro</samp></dt>
+				<dd>(mdoc) An AUTHORS sections contains no An macros, or only empty ones. Probably, there are author names lacking markup.</dd>
+			</dl>
+		</div>
+
+		<div id="warnings-related-to-macros-and-nesting">
+			<h3>Warnings related to macros and nesting</h3>
+			<dl>
+				<dt><samp>obsolete macro</samp></dt>
+				<dd>(mdoc) See the mdoc(7) manual for replacements.</dd>
+
+				<dt><samp>macro neither callable nor escaped</samp></dt>
+				<dd>(mdoc) The name of a macro that is not callable appears on a macro line. It is printed verbatim. If the intention is to call it, move it to its own input line; otherwise, escape it by prepending ‘\&amp;’.</dd>
+
+				<dt><samp>skipping paragraph macro</samp></dt>
+				<dd>
+					<p>In <a href="man://mdoc/7">mdoc(7)</a> documents, this happens</p>
+					<ul>
+						<li>at the beginning and end of sections and subsections</li>
+						<li>right before non-compact lists and displays</li>
+						<li>at the end of items in non-column, non-compact lists</li>
+						<li>and for multiple consecutive paragraph macros.</li>
+					</ul>
+					<p>In <a href="man://man/7">man(7)</a> documents, it happens
+					<ul>
+						<li>for empty P, PP, and LP macros</li>
+						<li>for IP macros having neither head nor body arguments</li>
+						<li>for br or sp right after SH or SS</li>
+					</ul>
+				</dd>
+
+				<dt><samp>moving paragraph macro out of list</samp></dt>
+				<dd>(mdoc) A list item in a Bl list contains a trailing paragraph macro. The paragraph macro is moved after the end of the list.</dd>
+
+				<dt><samp>skipping no-space macro</samp></dt>
+				<dd>(mdoc) An input line begins with an Ns macro, or the next argument after an Ns macro is an isolated closing delimiter. The macro is ignored.</dd>
+
+				<dt><samp>blocks badly nested</samp></dt>
+				<dd>(mdoc) If two blocks intersect, one should completely contain the other. Otherwise, rendered output is likely to look strange in any output format, and rendering in SGML-based output formats is likely to be outright wrong because such languages do not support badly nested blocks at all. Typical examples of badly nested blocks are “Ao Bo Ac Bc” and “Ao Bq Ac”. In these examples, Ac breaks Bo and Bq, respectively.</dd>
+
+				<dt><samp>nested displays are not portable</samp></dt>
+				<dd>(mdoc) A Bd, D1, or Dl display occurs nested inside another Bd display. This works with mandoc, but fails with most other implementations.</dd>
+
+				<dt><samp>moving content out of list</samp></dt>
+				<dd>(mdoc) A Bl list block contains text or macros before the first It macro. The offending children are moved before the beginning of the list.</dd>
+
+				<dt><samp>first macro on line</samp></dt>
+				<dd>Inside a Bl -column list, a Ta macro occurs as the first macro on a line, which is not portable.</dd>
+
+				<dt><samp>line scope broken</samp></dt>
+				<dd>(man) While parsing the next-line scope of the previous macro, another macro is found that prematurely terminates the previous one. The previous, interrupted macro is deleted from the parse tree.</dd>
+			</dl>
+		</div>
+
+		<div id="warnings-related-to-missing-arguments">
+			<h3>Warnings related to missing arguments</h3>
+			<dl>
+				<dt><samp>skipping empty request</samp></dt>
+				<dd>(roff, eqn) The macro name is missing from a macro definition request, or an eqn(7) control statement or operation keyword lacks its required argument.</dd>
+
+				<dt><samp>conditional request controls empty scope</samp></dt>
+				<dd>
+					<p>(roff) A conditional request is only useful if any of the following follows it on the same logical input line:</p>
+					<ul>
+						<li>The <code>\{</code> keyword to open a multi-line scope.</li>
+						<li>A request or macro or some text, resulting in a single-line scope.</li>
+						<li>The immediate end of the logical line without any intervening whitespace, resulting in next-line scope.</li>
+					</ul>
+					<p>Here, a conditional request is followed by trailing whitespace only, and there is no other content on its logical input line. Note that it doesn't matter whether the logical input line is split across multiple physical input lines using ‘\’ line continuation characters. This is one of the rare cases where trailing whitespace is syntactically significant. The conditional request controls a scope containing whitespace only, so it is unlikely to have a significant effect, except that it may control a following el clause.</p>
+				</dd>
+
+				<dt><samp>skipping empty macro</samp></dt>
+				<dd>(mdoc) The indicated macro has no arguments and hence no effect.</dd>
+
+				<dt><samp>empty block</samp></dt>
+				<dd>(mdoc, man) A Bd, Bk, Bl, D1, Dl, MT, RS, or UR block contains nothing in its body and will produce no output.</dd>
+
+				<dt><samp>empty argument, using 0n</samp></dt>
+				<dd>(mdoc) The required width is missing after Bd or Bl -offset or -width.</dd>
+
+				<dt><samp>missing display type, using -ragged</samp></dt>
+				<dd>(mdoc) The Bd macro is invoked without the required display type.</dd>
+
+				<dt><samp>list type is not the first argument</samp></dt>
+				<dd>(mdoc) In a Bl macro, at least one other argument precedes the type argument. The mandoc utility copes with any argument order, but some other mdoc(7) implementations do not.</dd>
+
+				<dt><samp>missing -width in -tag list, using 8n</samp></dt>
+				<dd>(mdoc) Every Bl macro having the -tag argument requires -width, too.</dd>
+
+				<dt><samp>missing utility name, using ""</samp></dt>
+				<dd>(mdoc) The Ex -std macro is called without an argument before Nm has first been called with an argument.</dd>
+
+				<dt><samp>missing function name, using ""</samp></dt>
+				<dd>(mdoc) The Fo macro is called without an argument. No function name is printed.</dd>
+
+				<dt><samp>empty head in list item</samp></dt>
+				<dd>(mdoc) In a Bl -diag, -hang, -inset, -ohang, or -tag list, an It macro lacks the required argument. The item head is left empty.</dd>
+
+				<dt><samp>empty list item</samp></dt>
+				<dd>(mdoc) In a <abbr><code>Bl</code></abbr> <code>-bullet</code>, <code>-dash</code>, <code>-enum</code>, or <code>-hyphen</code> list, an <abbr><code>It</code></abbr> block is empty. An empty list item is shown.</dd>
+
+				<dt><samp>missing argument, using next line</samp></dt>
+				<dd>(mdoc) An <abbr><code>It</code></abbr> macro in a <abbr><code>Bd</code></abbr> <code>-column</code> list has no arguments. While <dfn>mandoc</dfn> uses the text or macros of the following line, if any, for the cell, other formatters may misformat the list.</dd>
+
+				<dt><samp>missing font type, using \fR</samp></dt>
+				<dd>(mdoc) A <abbr><code>Bf</code></abbr> macro has no argument. It switches to the default font.</dd>
+
+				<dt><samp>unknown font type, using \fR</samp></dt>
+				<dd>(mdoc) The <abbr><code>Bf</code></abbr> argument is invalid. The default font is used instead.</dd>
+
+				<dt><samp>nothing follows prefix</samp></dt>
+				<dd>(mdoc) A <abbr><code>Pf</code></abbr> macro has no argument, or only one argument and no macro follows on the same input line. This defeats its purpose; in particular, spacing is not suppressed before the text or macros following on the next input line.</dd>
+
+				<dt><samp>empty reference block</samp></dt>
+				<dd>(mdoc) An <abbr><code>Rs</code></abbr> macro is immediately followed by an <abbr><code>Re</code></abbr> macro on the next input line. Such an empty block does not produce any output.</dd>
+
+				<dt><samp>missing section argument</samp></dt>
+				<dd>(mdoc) An <abbr><code>Xr</code></abbr> macro lacks its second, section number argument. The first argument, i.e. the name, is printed, but without subsequent parentheses.</dd>
+
+				<dt><samp>missing -std argument, adding it</samp></dt>
+				<dd>(mdoc) An <abbr><code>Ex</code></abbr> or <abbr><code>Rv</code></abbr> macro lacks the required <code>-std</code> argument. The <dfn>mandoc</dfn> utility assumes <code>-std</code> even when it is not specified, but other implementations may not.</dd>
+
+				<dt><samp>missing option string, using ""</samp></dt>
+				<dd>(man) The <abbr><code>OP</code></abbr> macro is invoked without any argument. An empty pair of square brackets is shown.</dd>
+
+				<dt><samp>missing resource identifier, using ""</samp></dt>
+				<dd>(man) The <abbr><code>MT</code></abbr> or <abbr><code>UR</code></abbr> macro is invoked without any argument. An empty pair of angle brackets is shown.</dd>
+
+				<dt><samp>missing eqn box, using ""</samp></dt>
+				<dd>(eqn) A diacritic mark or a binary operator is found, but there is nothing to the left of it. An empty box is inserted.</dd>
+			</dl>
+		</div>
+
+		<div id="warnings-related-to-bad-macro-arguments">
+			<h3>Warnings related to bad macro arguments</h3>
+			<dl>
+				<dt><samp>duplicate argument</samp></dt>
+				<dd>(mdoc) A <abbr><code>Bd</code></abbr> or <abbr><code>Bl</code></abbr> macro has more than one <code>-compact</code>, more than one <code>-offset</code>, or more than one <code>-width</code> argument. All but the last instances of these arguments are ignored.</dd>
+
+				<dt><samp>skipping duplicate argument</samp></dt>
+				<dd>(mdoc) An <abbr><code>An</code></abbr> macro has more than one <code>-split</code> or <code>-nosplit</code> argument. All but the first of these arguments are ignored.</dd>
+
+				<dt><samp>skipping duplicate display type</samp></dt>
+				<dd>(mdoc) A <abbr><code>Bd</code></abbr> macro has more than one type argument; the first one is used.</dd>
+
+				<dt><samp>skipping duplicate list type</samp></dt>
+				<dd>(mdoc) A <abbr><code>Bl</code></abbr> macro has more than one type argument; the first one is used.</dd>
+
+				<dt><samp>skipping -width argument</samp></dt>
+				<dd>(mdoc) A <abbr><code>Bl</code></abbr> <code>-column</code>, <code>-diag</code>, <code>-ohang</code>, <code>-inset</code>, or <code>-item</code> list has a <code>-width</code> argument. That has no effect.</dd>
+
+				<dt><samp>wrong number of cells</samp></dt>
+				<dd>In a line of a <abbr><code>Bl</code></abbr> <code>-column</code> list, the number of tabs or <abbr><code>Ta</code></abbr> macros is less than the number expected from the list header line or exceeds the expected number by more than one. Missing cells remain empty, and all cells exceeding the number of columns are joined into one single cell.</dd>
+
+				<dt><samp>unknown AT&T UNIX version</samp></dt>
+				<dd>(mdoc) An <abbr><code>At</code></abbr> macro has an invalid argument. It is used verbatim, with <samp>AT&amp;T UNIX </samp> prefixed to it.</dd>
+
+				<dt><samp>comma in function argument</samp></dt>
+				<dd>(mdoc) An argument of an <abbr><code>Fa</code></abbr> or <abbr><code>Fn</code></abbr> macro contains a comma; it should probably be split into two arguments.</dd>
+
+				<dt><samp>parenthesis in function name</samp></dt>
+				<dd>(mdoc) The first argument of an <abbr><code>Fc</code></abbr> or <abbr><code>Fn</code></abbr> macro contains an opening or closing parenthesis; that's probably wrong, parentheses are added automatically.</dd>
+
+				<dt><samp>unknown library name</samp></dt>
+				<dd>(mdoc, not on OpenBSD) An <abbr><code>Lb</code></abbr> macro has an unknown name argument and will be rendered as <samp>library “name”</samp>.</dd>
+
+				<dt><samp>invalid content in Rs block</samp></dt>
+				<dd>(mdoc) An <abbr><code>Rs</code></abbr> block contains plain text or non-% macros. The bogus content is left in the syntax tree. Formatting may be poor.</dd>
+
+				<dt><samp>invalid Boolean argument</samp></dt>
+				<dd>(mdoc) An <abbr><code>Sm</code></abbr> macro has an argument other than <var>on</var> or <var>off</var>. The invalid argument is moved out of the macro, which leaves the macro empty, causing it to toggle the spacing mode.</dd>
+
+				<dt><samp>unknown font, skipping request</samp></dt>
+				<dd>(man, tbl) A <a href="man://roff/7">roff(7)</a> <abbr><code>ft</code></abbr> request or a <a href="man://tbl/7">tbl(7)</a> <code>f</code> layout modifier has an unknown font argument.</dd>
+
+				<dt><samp>odd number of characters in request</samp></dt>
+				<dd>(roff) A <abbr><code>tr</code></abbr> request contains an odd number of characters. The last character is mapped to the blank character.</dd>
+			</dl>
+		</div>
+
+		<div id="warnings-related-to-plain-text">
+			<h3>Warnings related to plain text</h3>
+			<dl>
+				<dt><samp>blank line in fill mode, using .sp</samp></dt>
+				<dd>(mdoc) The meaning of blank input lines is only well-defined in non-fill mode: In fill mode, line breaks of text input lines are not supposed to be significant. However, for compatibility with groff, blank lines in fill mode are replaced with <abbr><code>sp</code></abbr> requests.</dd>
+
+				<dt><samp>tab in filled text</samp></dt>
+				<dd>(mdoc, man) The meaning of tab characters is only well-defined in non-fill mode: In fill mode, whitespace is not supposed to be significant on text input lines. As an implementation dependent choice, tab characters on text lines are passed through to the formatters in any case. Given that the text before the tab character will be filled, it is hard to predict which tab stop position the tab will advance to.</dd>
+
+				<dt><samp>new sentence, new line</samp></dt>
+				<dd>(mdoc) A new sentence starts in the middle of a text line. Start it on a new input line to help formatters produce correct spacing.</dd>
+
+				<dt><samp>invalid escape sequence</samp></dt>
+				<dd>(roff) An escape sequence has an invalid opening argument delimiter, lacks the closing argument delimiter, or the argument has too few characters. If the argument is incomplete, <code>\*</code> and <code>\n</code> expand to an empty string, <code>\B</code> to the digit ‘0’, and <code>\w</code> to the length of the incomplete argument. All other invalid escape sequences are ignored.</dd>
+
+				<dt><samp>undefined string, using ""</samp></dt>
+				<dd>(roff) If a string is used without being defined before, its value is implicitly set to the empty string. However, defining strings explicitly before use keeps the code more readable.</dd>
+			</dl>
+		</div>
+
+		<div id="warnings-related-to-tables">
+			<h3>Warnings related to tables</h3>
+			<dl>
+				<dt><samp>tbl line starts with span</samp></dt>
+				<dd>(tbl) The first cell in a table layout line is a horizontal span (<code>s</code>). Data provided for this cell is ignored, and nothing is printed in the cell.</dd>
+
+				<dt><samp>tbl column starts with span</samp></dt>
+				<dd>(tbl) The first line of a table layout specification requests a vertical span (<code>^</code>). Data provided for this cell is ignored, and nothing is printed in the cell.</dd>
+
+				<dt><samp>skipping vertical bar in tbl layout</samp></dt>
+				<dd>(tbl) A table layout specification contains more than two consecutive vertical bars. A double bar is printed, all additional bars are discarded.</dd>
+			</dl>
+		</div>
+
+		<div id="errors-related-to-tables">
+			<h3>Errors related to tables</h3>
+			<dl>
+				<dt><samp>non-alphabetic character in tbl options</samp></dt>
+				<dd>(tbl) The table options line contains a character other than a letter, blank, or comma where the beginning of an option name is expected. The character is ignored.</dd>
+
+				<dt><samp>skipping unknown tbl option</samp></dt>
+				<dd>(tbl) The table options line contains a string of letters that does not match any known option name. The word is ignored.</dd>
+
+				<dt><samp>missing tbl option argument</samp></dt>
+				<dd>(tbl) A table option that requires an argument is not followed by an opening parenthesis, or the opening parenthesis is immediately followed by a closing parenthesis. The option is ignored.</dd>
+
+				<dt><samp>wrong tbl option argument size</samp></dt>
+				<dd>(tbl) A table option argument contains an invalid number of characters. Both the option and the argument are ignored.</dd>
+
+				<dt><samp>empty tbl layout</samp></dt>
+				<dd>(tbl) A table layout specification is completely empty, specifying zero lines and zero columns. As a fallback, a single left-justified column is used.</dd>
+
+				<dt><samp>invalid character in tbl layout</samp></dt>
+				<dd>(tbl) A table layout specification contains a character that can neither be interpreted as a layout key character nor as a layout modifier, or a modifier precedes the first key. The invalid character is discarded.</dd>
+
+				<dt><samp>unmatched parenthesis in tbl layout</samp></dt>
+				<dd>(tbl) A table layout specification contains an opening parenthesis, but no matching closing parenthesis. The rest of the input line, starting from the parenthesis, has no effect.</dd>
+
+				<dt><samp>tbl without any data cells</samp></dt>
+				<dd>(tbl) A table does not contain any data cells. It will probably produce no output.</dd>
+
+				<dt><samp>ignoring data in spanned tbl cell</samp></dt>
+				<dd>(tbl) A table cell is marked as a horizontal span (<code>s</code>) or vertical span (<code>^</code>) in the table layout, but it contains data. The data is ignored.</dd>
+
+				<dt><samp>ignoring extra tbl data cells</samp></dt>
+				<dd>(tbl) A data line contains more cells than the corresponding layout line. The data in the extra cells is ignored.</dd>
+
+				<dt><samp>data block open at end of tbl</samp></dt>
+				<dd>(tbl) A data block is opened with <abbr><code>T{</code></abbr>, but never closed with a matching <abbr><code>T}</code></abbr>. The remaining data lines of the table are all put into one cell, and any remaining cells stay empty.</dd>
+			</dl>
+		</div>
+
+		<div id="errors-related-to-roff-mdoc-and-man-code">
+			<h3>Errors related to roff, mdoc, and man code</h3>
+			<dl>
+				<dt><samp>duplicate prologue macro</samp></dt>
+				<dd>(mdoc) One of the prologue macros occurs more than once. The last instance overrides all previous ones.</dd>
+
+				<dt><samp>skipping late title macro</samp></dt>
+				<dd>(mdoc) The <abbr><code>Dt</code></abbr> macro appears after the first non-prologue macro. Traditional formatters cannot handle this because they write the page header before parsing the document body. Even though this technical restriction does not apply to <dfn>mandoc</dfn>, traditional semantics is preserved. The late macro is discarded including its arguments.</dd>
+
+				<dt><samp>input stack limit exceeded, infinite loop?</samp></dt>
+				<dd>
+					<p>(roff) Explicit recursion limits are implemented for the following features, in order to prevent infinite loops:</p>
+					<ul>
+						<li>expansion of nested escape sequences including expansion of strings and number registers,</li>
+						<li>expansion of nested user-defined macros,</li>
+						<li>and so file inclusion.</li>
+					</ul>
+					<p>When a limit is hit, the output is incorrect, typically losing some content, but the parser can continue.</p>
+				</dd>
+				
+				<dt><samp>skipping bad character</samp></dt>
+				<dd>(mdoc, man, roff) The input file contains a byte that is not a printable <a href="man://ascii/7">ascii(7)</a> character. The message mentions the character number. The offending byte is replaced with a question mark (<samp>?</samp>). Consider editing the input file to replace the byte with an ASCII transliteration of the intended character.</dd>
+
+				<dt><samp>skipping unknown macro</samp></dt>
+				<dd>(mdoc, man, roff) The first identifier on a request or macro line is neither recognized as a <a href="man://roff/7">roff(7)</a> request, nor as a user-defined macro, nor, respectively, as an <a href="man://mdoc/7">mdoc(7)</a> or <a href="man://man/7">man(7)</a> macro. It may be mistyped or unsupported. The request or macro is discarded including its arguments.</dd>
+
+				<dt><samp>skipping insecure request</samp></dt>
+				<dd>(roff) An input file attempted to run a shell command or to read or write an external file. Such attempts are denied for security reasons.</dd>
+
+				<dt><samp>skipping item outside list</samp></dt>
+				<dd>(mdoc, eqn) An <abbr><code>It</code></abbr> macro occurs outside any <abbr><code>Bl</code></abbr> list, or an <a href="man://eqn/7">eqn(7)</a> above delimiter occurs outside any pile. It is discarded including its arguments.</dd>
+
+				<dt><samp>skipping column outside column list</samp></dt>
+				<dd>(mdoc) A <abbr><code>Ta</code></abbr> macro occurs outside any <abbr><code>Bl -column</code></abbr> block. It is discarded including its arguments.</dd>
+
+				<dt><samp>skipping end of block that is not open</samp></dt>
+				<dd>(mdoc, man, eqn, tbl, roff) Various syntax elements can only be used to explicitly close blocks that have previously been opened. An <a href="man://mdoc/7">mdoc(7)</a> block closing macro, a <a href="man://man/7">man(7)</a> <abbr><code>ME</code></abbr>, <abbr><code>RE</code></abbr> or <abbr><code>UE</code></abbr> macro, an <a href="man://eqn/7">eqn(7)</a> right delimiter or closing brace, or the end of an equation, table, or <a href="man://roff/7">roff(7)</a> conditional request is encountered but no matching block is open. The offending request or macro is discarded.</dd>
+
+				<dt><samp>fewer RS blocks open, skipping</samp></dt>
+				<dd>(man) The <abbr><code>RE</code></abbr> macro is invoked with an argument, but less than the specified number of <abbr><code>RS</code></abbr> blocks is open. The <abbr><code>RE</code></abbr> macro is discarded.</dd>
+
+				<dt><samp>inserting missing end of block</samp></dt>
+				<dd>(mdoc, tbl) Various <a href="man://mdoc/7">mdoc(7)</a> macros as well as tables require explicit closing by dedicated macros. A block that doesn't support bad nesting ends before all of its children are properly closed. The open child nodes are closed implicitly.</dd>
+
+				<dt><samp>appending missing end of block</samp></dt>
+				<dd>(mdoc, man, eqn, tbl, roff) At the end of the document, an explicit <a href="man://mdoc/7">mdoc(7)</a> block, a <a href="man://man/7">man(7)</a> next-line scope or <abbr><code>MT</code></abbr>, <abbr><code>RS</code></abbr> or <abbr><code>UR</code></abbr> block, an equation, table, or <a href="man://roff/7">roff(7)</a> conditional or ignore block is still open. The open block is closed implicitly.</dd>
+
+				<dt><samp>escaped character not allowed in a name</samp></dt>
+				<dd>(roff) Macro, string and register identifiers consist of printable, non-whitespace ASCII characters. Escape sequences and characters and strings expressed in terms of them cannot form part of a name. The first argument of an <abbr><code>am</code></abbr>, <abbr><code>as</code></abbr>, <abbr><code>de</code></abbr>, <abbr><code>ds</code></abbr>, <abbr><code>nr</code></abbr>, or <abbr><code>rr</code></abbr> request, or any argument of an <abbr><code>rm</code></abbr> request, or the name of a request or user defined macro being called, is terminated by an escape sequence. In the cases of <abbr><code>as</code></abbr>, <abbr><code>ds</code></abbr>, and <abbr><code>nr</code></abbr>, the request has no effect at all. In the cases of <abbr><code>am</code></abbr>, <abbr><code>de</code></abbr>, <abbr><code>rr</code></abbr>, and <abbr><code>rm</code></abbr>, what was parsed up to this point is used as the arguments to the request, and the rest of the input line is discarded including the escape sequence. When parsing for a request or a user-defined macro name to be called, only the escape sequence is discarded. The characters preceding it are used as the request or macro name, the characters following it are used as the arguments to the request or macro.</dd>
+
+				<dt><samp>NOT IMPLEMENTED: Bd -file</samp></dt>
+				<dd>(mdoc) For security reasons, the <abbr><code>Bd</code></abbr> macro does not support the <var>-file</var> argument. By requesting the inclusion of a sensitive file, a malicious document might otherwise trick a privileged user into inadvertently displaying the file on the screen, revealing the file content to bystanders. The argument is ignored including the file name following it.</dd>
+
+				<dt><samp>skipping display without arguments</samp></dt>
+				<dd>(mdoc) A <abbr><code>Bd</code></abbr> block macro does not have any arguments. The block is discarded, and the block content is displayed in whatever mode was active before the block.</dd>
+
+				<dt><samp>missing list type, using -item</samp></dt>
+				<dd>(mdoc) A <abbr><code>Bl</code></abbr> macro fails to specify the list type.</dd>
+
+				<dt><samp>argument is not numeric, using 1</samp></dt>
+				<dd>(roff) The argument of a <abbr><code>ce</code></abbr> request is not a number.</dd>
+
+				<dt><samp>missing manual name, using ""</samp></dt>
+				<dd>(mdoc) The first call to <abbr><code>Nm</code></abbr>, or any call in the <a href="#name">Name</a> section, lacks the required argument.</dd>
+
+				<dt><samp>uname(3) system call failed, using UNKNOWN</samp></dt>
+				<dd>(mdoc) The <abbr><code>Os</code></abbr> macro is called without arguments, and the <a href="man://uname/3">uname(3)</a> system call failed. As a workaround, <dfn>mandoc</dfn> can be compiled with <code>-DOSNAME="\"string\""</code>.</dd>
+
+				<dt><samp>unknown standard specifier</samp></dt>
+				<dd>(mdoc) An <abbr><code>St</code></abbr> macro has an unknown argument and is discarded.</dd>
+
+				<dt><samp>skipping request without numeric argument</samp></dt>
+				<dd>(roff, eqn) An <abbr><code>it</code></abbr> request or an <a href="man://eqn/7">eqn(7)</a> size or <code>gsize</code> statement has a non-numeric or negative argument or no argument at all. The invalid request or statement is ignored.</dd>
+
+				<dt><samp>NOT IMPLEMENTED: .so with absolute path or ".."</samp></dt>
+				<dd>(roff) For security reasons, <dfn>mandoc</dfn> allows <code>so</code> file inclusion requests only with relative paths and only without ascending to any parent directory. By requesting the inclusion of a sensitive file, a malicious document might otherwise trick a privileged user into inadvertently displaying the file on the screen, revealing the file content to bystanders. <dfn>mandoc</dfn> only shows the path as it appears behind <abbr><code>so</code></abbr>.</dd>
+
+				<dt><samp>.so request failed</samp></dt>
+				<dd>(roff) Servicing a <abbr><code>so</code></abbr> request requires reading an external file, but the file could not be opened. <dfn>mandoc</dfn> only shows the path as it appears behind <abbr><code>so</code></abbr>.</dd>
+
+				<dt><samp>skipping all arguments</samp></dt>
+				<dd>(mdoc, man, eqn, roff) An <a href="man://mdoc/7">mdoc(7)</a>
+					<abbr><code>Bt</code></abbr>,
+					<abbr><code>Ed</code></abbr>,
+					<abbr><code>Ef</code></abbr>,
+					<abbr><code>Ek</code></abbr>,
+					<abbr><code>El</code></abbr>,
+					<abbr><code>Lp</code></abbr>,
+					<abbr><code>Pp</code></abbr>,
+					<abbr><code>Re</code></abbr>,
+					<abbr><code>Rs</code></abbr>, or
+					<abbr><code>Ud</code></abbr> macro,
+					an <abbr><code>It</code></abbr> macro in a list that don't support item heads,
+					a <a href="man://man/7">man(7)</a>
+					<abbr><code>LP</code></abbr>,
+					<abbr><code>P</code></abbr>, or
+					<abbr><code>PP</code></abbr> macro,
+					an <a href="man://eqn/7">eqn(7)</a>
+					<abbr><code>EQ</code></abbr> or
+					<abbr><code>EN</code></abbr> macro, or a <a href="man://roff/7">roff(7)</a>
+					<abbr><code>br</code></abbr>,
+					<abbr><code>fi</code></abbr>, or
+					<abbr><code>nf</code></abbr> request or <code>..</code> block closing request is invoked with at least one argument. All arguments are ignored.</dd>
+
+				<dt><samp>skipping excess arguments</samp></dt>
+				<dd>
+					<p>(mdoc, man, roff) A macro or request is invoked with too many arguments:</p>
+					<ul>
+						<li><abbr><code>Fo</code></abbr>, <abbr><code>MT</code></abbr>, <abbr><code>PD</code></abbr>, <abbr><code>RS</code></abbr>, <abbr><code>UR</code></abbr>, <abbr><code>ft</code></abbr>, or <abbr><code>sp</code></abbr> with more than one argument</li>
+						<li><abbr><code>An</code></abbr> with another argument after <code>-split</code> or <code>-nosplit</code></li>
+						<li><abbr><code>RE</code></abbr> with more than one argument or with a non-integer argument</li>
+						<li><abbr><code>OP</code></abbr> or a request of the <abbr><code>de</code></abbr> family with more than two arguments</li>
+						<li><abbr><code>Dt</code></abbr> with more than three arguments</li>
+						<li><abbr><code>TH</code></abbr> with more than five arguments</li>
+						<li><abbr><code>Bd</code></abbr>, <abbr><code>Bk</code></abbr>, or <abbr><code>Bl</code></abbr> with invalid arguments</li>
+					</ul>
+					<p>The excess arguments are ignored.</p>
+				</dd>
+			</dl>
+		</div>
+
+		<div id="unsupported-features">
+			<h3>Unsupported features</h3>
+			<dl>
+				<dt><samp>input too large</samp></dt>
+				<dd>(mdoc, man) Currently, <dfn>mandoc</dfn> cannot handle input files larger than its arbitrary size limit of 2^31 bytes (2 Gigabytes). Since useful manuals are always small, this is not a problem in practice. Parsing is aborted as soon as the condition is detected.</dd>
+
+				<dt><samp>unsupported control character</samp></dt>
+				<dd>(roff) An ASCII control character supported by other <a href="man://roff/7">roff(7)</a> implementations but not by <dfn>mandoc</dfn> was found in an input file. It is replaced by a question mark.</dd>
+
+				<dt><samp>unsupported roff request</samp></dt>
+				<dd>(roff) An input file contains a <a href="man://roff/7">roff(7)</a> request supported by <abbr>GNU</abbr> troff or Heirloom troff but not by <dfn>mandoc</dfn>, and it is likely that this will cause information loss or considerable misformatting.</dd>
+
+				<dt><samp>eqn delim option in tbl</samp></dt>
+				<dd>(eqn, tbl) The options line of a table defines equation delimiters. Any equation source code contained in the table will be printed unformatted.</dd>
+
+				<dt><samp>unsupported table layout modifier</samp></dt>
+				<dd>(tbl) A table layout specification contains an <code>m</code> modifier. The modifier is discarded.</dd>
+
+				<dt><samp>ignoring macro in table</samp></dt>
+				<dd>(tbl, mdoc, man) A table contains an invocation of an <a href="man://mdoc/7">mdoc(7)</a> or <a href="man://man/7">man(7)</a> macro or of an undefined macro. The macro is ignored, and its arguments are handled as if they were a text line.</dd>
+			</dl>
+		</div>
+	</section>
+
+	<section id="see-also">
+		<h2>See also</h2>
+		<p>
+			<a href="man://apropos/1">apropos(1)</a>,
+			<a href="man://man/1">man(1)</a>,
+			<a href="man://eqn/7">eqn(7)</a>,
+			<a href="man://man/7">man(7)</a>,
+			<a href="man://mandoc_char/7">mandoc_char(7)</a>,
+			<a href="man://mdoc/7">mdoc(7)</a>,
+			<a href="man://roff/7">roff(7)</a>,
+			<a href="man://tbl/7">tbl(7)</a>
+		</p>
+	</section>
+
+	<section id="history">
+		<h2>History</h2>
+		<p>The <dfn>mandoc</dfn> utility first appeared in OpenBSD 4.8. The option <kbd>-I</kbd> appeared in OpenBSD 5.2, and <kbd>-aCcfhKklMSsw</kbd> in OpenBSD 5.7.</p>
+	</section>
+
+	<section id="authors">
+		<h2>Authors</h2>
+		<p>The <dfn>mandoc</dfn> utility was written by <a rel="author" href="mailto:kristaps@bsd.lv">Kristaps Dzonsons</a> and is maintained by <a rel="author" href="mailto:schwarze@openbsd.org">Ingo Schwarze</a>.</p>
+	</section>
+	
+	<footer>
+		<time datetime="2018-04-13">April 13, 2018</time>
+		<p>OpenBSD-current</p>
+	</footer>
+</body>
+</html>

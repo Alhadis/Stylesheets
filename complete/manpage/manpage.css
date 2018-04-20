@@ -1,0 +1,93 @@
+*{
+	tab-size: 4;
+	box-sizing: border-box;
+}
+
+html{
+	font-family: Cambria, Times, serif;
+}
+
+body{
+	padding: 1em;
+}
+
+header{
+	padding-bottom: .5em;
+	border-bottom: 1px solid #ccc;
+	display: table;
+	width: 100%;
+}
+	header > *{
+		display: table-cell;
+		text-align: right;
+		margin: 0;
+	}
+	header > h1{
+		font-size: 1em;
+		font-weight: normal;
+		text-transform: uppercase;
+		text-align: left;
+	}
+	
+	/** DRY hack for 3-part headers */
+	header[title]{
+		text-align: center;
+	}
+		header[title]::before,
+		header[title]::after{
+			content: attr(title);
+			display: table-cell;
+			text-transform: uppercase;
+		}
+		header[title]::before { text-align: left; }
+		header[title]::after  { text-align: right; }
+		header[title] > *     { text-align: center; }
+		header[title] > h1    { display: none; }
+
+
+h2{
+	text-transform: uppercase;
+	font-size: 1.25em;
+	margin-bottom: .5em;
+}
+
+h3{
+	margin-left: -.5em;
+}
+
+dfn{
+	font-weight: bold;
+	font-style: normal;
+}
+
+kbd{
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+.synopsis{
+	display: table;
+}
+	.synopsis > *{
+		display: table-cell;
+		vertical-align: top;
+	}
+	.synopsis > :first-child{
+		padding-right: 1em;
+	}
+	.options{
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+		.options > li{
+			display: inline-block;
+			white-space: nowrap;
+		}
+
+section[id]{
+	padding-left: 3em;
+}
+	section[id] > h2{
+		margin-left: -2.35em;
+	}
