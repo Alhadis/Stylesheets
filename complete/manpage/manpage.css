@@ -65,6 +65,21 @@ kbd{
 	white-space: nowrap;
 }
 
+samp kbd{
+	font-weight: normal;
+}
+
+samp .prompt{
+	-webkit-user-select: none;
+	-moz-user-select:    none;
+	user-select:         none;
+}
+
+figcaption{
+	margin-left: -2.5em;
+}
+
+
 .synopsis{
 	display: table;
 }
