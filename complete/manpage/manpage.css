@@ -52,8 +52,20 @@ h2{
 }
 
 h3{
-	margin-left: -.5em;
+	margin-left: -1.5em;
+	margin-bottom: .5em;
 }
+	h2 + p,
+	h3 + p{
+		margin-top: .5em;
+	}
+
+dd{
+	margin: .25em 0 .5em 2.5em;
+}
+	dd > :first-child{
+		margin-top: 0;
+	}
 
 dfn{
 	font-weight: bold;
@@ -80,14 +92,14 @@ figcaption{
 }
 
 
-.synopsis{
+.usage{
 	display: table;
 }
-	.synopsis > *{
+	.usage > *{
 		display: table-cell;
 		vertical-align: top;
 	}
-	.synopsis > :first-child{
+	.usage > :first-child{
 		padding-right: 1em;
 	}
 	.options{
@@ -95,8 +107,9 @@ figcaption{
 		margin: 0;
 		padding: 0;
 	}
-		.options > li{
+		.options > *{
 			display: inline-block;
+			font-family: inherit;
 			white-space: nowrap;
 		}
 

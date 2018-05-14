@@ -24,19 +24,32 @@
 
 	<section id="synopsis">
 		<h2>Synopsis</h2>
-		<div class="synopsis">
+		<div class="usage">
 			<dfn>mandoc</dfn>
-			<ul class="options">
-				<li>[<kbd>-ac</kbd>]</li>
-				<li>[<kbd>-I os</kbd>=<var>name</var>]</li>
-				<li>[<kbd>-K</kbd> <var>encoding</var>]</li>
-				<li>[<kbd>-mdoc</kbd> | <kbd>-man</kbd>]</li>
-				<li>[<kbd>-O</kbd> <var>options</var>]</li>
-				<li>[<kbd>-T</kbd> <var>output</var>]</li>
-				<li>[<kbd>-W</kbd> <var>level</var>]</li>
-				<li>[<kbd>file</kbd> <var>&hellip;</var>]</li>
-			</ul>
+			<span class="options">
+				<code>[<kbd>-ac</kbd>]</code>
+				<code>[<kbd>-I os</kbd>=<var>name</var>]</code>
+				<code>[<kbd>-K</kbd> <var>encoding</var>]</code>
+				<code>[<kbd>-mdoc</kbd> | <kbd>-man</kbd>]</code>
+				<code>[<kbd>-O</kbd> <var>options</var>]</code>
+				<code>[<kbd>-T</kbd> <var>output</var>]</code>
+				<code>[<kbd>-W</kbd> <var>level</var>]</code>
+				<code>[<kbd>file</kbd> <var>&hellip;</var>]</code>
+			</span>
 		</div>
+		<div class="usage">
+			<dfn>mandoc</dfn>
+			<span class="options">
+				<code>[<kbd>-v</kbd> | <kbd>--version</kbd>]</code>
+			</span>
+		</div>
+		<div class="usage">
+			<dfn>mandoc</dfn>
+			<span class="options">
+				<code>[<kbd>-h</kbd> | <kbd>--help</kbd>]</code>
+			</span>
+		</div>
+		<p>The last two lines above are fictional additions to <dfn>mandoc</dfn>'s usual synopsis, included to demonstrate handling of more complex synopsis content.</p>
 	</section>
 
 	<section id="description">
@@ -46,13 +59,13 @@
 		<p>The options are as follows:</p>
 		<dl>
 			<dt><kbd>-a</kbd></dt>
-			<dd>If the standard output is a terminal device and <kbd>-c</kbd> is not specified, use <a href="man://more/1">more(1)</a> to paginate the output, just like <a href="man://man/1">man(1)</a> would.</dd>
+			<dd><p>If the standard output is a terminal device and <kbd>-c</kbd> is not specified, use <a href="man://more/1">more(1)</a> to paginate the output, just like <a href="man://man/1">man(1)</a> would.</p></dd>
 
 			<dt><kbd>-c</kbd></dt>
-			<dd>Copy the formatted manual pages to the standard output without using <a href="man://more/1">more(1)</a> to paginate them. This is the default. It can be specified to override <kbd>-a</kbd>.</dd>
+			<dd><p>Copy the formatted manual pages to the standard output without using <a href="man://more/1">more(1)</a> to paginate them. This is the default. It can be specified to override <kbd>-a</kbd>.</p></dd>
 			
 			<dt><kbd>-I os</kbd>=<var>name</var></dt>
-			<dd>Override the default operating system name for the <a href="man://mdoc/7">mdoc(7)</a> <abbr><code>Os</code></abbr> and for the <a href="man://man/7">man(7)</a> <abbr><code>TH</code></abbr> macro.</dd>
+			<dd><p>Override the default operating system name for the <a href="man://mdoc/7">mdoc(7)</a> <abbr><code>Os</code></abbr> and for the <a href="man://man/7">man(7)</a> <abbr><code>TH</code></abbr> macro.</p></dd>
 			
 			<dt><kbd>-K</kbd> <var>encoding</var></dt>
 			<dd>
@@ -66,13 +79,13 @@
 			</dd>
 			
 			<dt><kbd>-mdoc</kbd> | <kbd>-man</kbd></dt>
-			<dd>With <kbd>-mdoc</kbd>, all input files are interpreted as <a href="man://mdoc/7">mdoc(7)</a>. With <kbd>-man</kbd>, all input files are interpreted as <a href="man://man/7">man(7)</a>. By default, the input language is automatically detected for each file: if the first macro is <abbr><code>Dd</code></abbr> or <abbr><code>Dt</code></abbr>, the <a href="man://mdoc/7">mdoc(7)</a> parser is used; otherwise, the <a href="man://man/7">man(7)</a> parser is used. With other arguments, <kbd>-m</kbd> is silently ignored.</dd>
+			<dd><p>With <kbd>-mdoc</kbd>, all input files are interpreted as <a href="man://mdoc/7">mdoc(7)</a>. With <kbd>-man</kbd>, all input files are interpreted as <a href="man://man/7">man(7)</a>. By default, the input language is automatically detected for each file: if the first macro is <abbr><code>Dd</code></abbr> or <abbr><code>Dt</code></abbr>, the <a href="man://mdoc/7">mdoc(7)</a> parser is used; otherwise, the <a href="man://man/7">man(7)</a> parser is used. With other arguments, <kbd>-m</kbd> is silently ignored.</p></dd>
 			
 			<dt><kbd>-O</kbd> <var>options</var></dt>
-			<dd>Comma-separated output options.</dd>
+			<dd><p>Comma-separated output options.</p></dd>
 			
 			<dt><kbd>-T</kbd> <var>output</var></dt>
-			<dd>Output format. See <a href="#output-formats">Output Formats</a> for available formats. Defaults to <code>-T locale</code>.</dd>
+			<dd><p>Output format. See <a href="#output-formats">Output Formats</a> for available formats. Defaults to <code>-T locale</code>.</p></dd>
 			
 			<dt><kbd>-W</kbd> <var>level</var></dt>
 			<dd>
@@ -92,7 +105,7 @@
 			</dd>
 			
 			<dt><kbd>file</kbd></dt>
-			<dd>Read input from zero or more files. If unspecified, reads from <abbr title="standard input">stdin</abbr>. If multiple files are specified, <dfn>mandoc</dfn> will halt with the first failed parse.</dd>
+			<dd><p>Read input from zero or more files. If unspecified, reads from <abbr title="standard input">stdin</abbr>. If multiple files are specified, <dfn>mandoc</dfn> will halt with the first failed parse.</p></dd>
 		</dl>
 		<p>The options <kbd>-fhklw</kbd> are also supported and are documented in <a href="man://man/1">man(1)</a>. In <kbd>-f</kbd> and <kbd>-k</kbd> mode, <dfn>mandoc</dfn> also supports the options <kbd>-CMmOSs</kbd> described in the <a href="man://apropos/1">apropos(1)</a> manual. The options <kbd>-fkl</kbd> are mutually exclusive and override each other.</p>
 
@@ -101,34 +114,34 @@
 			<p>The mandoc utility accepts the following -T arguments, which correspond to output modes:</p>
 			<dl>
 				<dt><kbd>-T ascii</kbd></dt>
-				<dd>Produce 7-bit ASCII output. See <a href="#ascii-output">ASCII Output</a>.</dd>
+				<dd><p>Produce 7-bit ASCII output. See <a href="#ascii-output">ASCII Output</a>.</p></dd>
 				
 				<dt><kbd>-T html</kbd></dt>
-				<dd>Produce HTML5, CSS1, and MathML output. See <a href="#html-output">HTML Output</a>.</dd>
+				<dd><p>Produce HTML5, CSS1, and MathML output. See <a href="#html-output">HTML Output</a>.</p></dd>
 
 				<dt><kbd>-T lint</kbd></dt>
-				<dd>Parse only: produce no output. Implies <kbd>-W all</kbd> and redirects parser messages, which usually appear on standard error output, to standard output.</dd>
+				<dd><p>Parse only: produce no output. Implies <kbd>-W all</kbd> and redirects parser messages, which usually appear on standard error output, to standard output.</p></dd>
 
 				<dt><kbd>-T locale</kbd></dt>
-				<dd>Encode output using the current locale. This is the default. See <a href="#locale-output">Locale Output</a>.</dd>
+				<dd><p>Encode output using the current locale. This is the default. See <a href="#locale-output">Locale Output</a>.</p></dd>
 
 				<dt><kbd>-T man</kbd></dt>
-				<dd>Produce <a href="man://man/7">man(7)</a> format output. See <a href="#man-output">Man Output</a>.</dd>
+				<dd><p>Produce <a href="man://man/7">man(7)</a> format output. See <a href="#man-output">Man Output</a>.</p></dd>
 
 				<dt><kbd>-T markdown</kbd></dt>
-				<dd>Produce output in markdown format. See <a href="#markdown-output">Markdown Output</a>.</dd>
+				<dd><p>Produce output in markdown format. See <a href="#markdown-output">Markdown Output</a>.</p></dd>
 
 				<dt><kbd>-T pdf</kbd></dt>
-				<dd>Produce PDF output. See <a href="#pdf-output">PDF Output</a>.</dd>
+				<dd><p>Produce PDF output. See <a href="#pdf-output">PDF Output</a>.</p></dd>
 
 				<dt><kbd>-T ps</kbd></dt>
-				<dd>Produce PostScript output. See <a href="#postscript-output">PostScript Output</a>.</dd>
+				<dd><p>Produce PostScript output. See <a href="#postscript-output">PostScript Output</a>.</p></dd>
 
 				<dt><kbd>-T tree</kbd></dt>
-				<dd>Produce an indented parse tree. See <a href="#syntax-tree-output">Syntax tree output</a>.</dd>
+				<dd><p>Produce an indented parse tree. See <a href="#syntax-tree-output">Syntax tree output</a>.</p></dd>
 
 				<dt><kbd>-T utf8</kbd></dt>
-				<dd>Encode output in the UTF-8 multi-byte format. See <a href="#utf8-output">UTF-8 Output</a>.</dd>
+				<dd><p>Encode output in the UTF-8 multi-byte format. See <a href="#utf8-output">UTF-8 Output</a>.</p></dd>
 			</dl>
 			<p>If multiple input files are specified, these will be processed by the corresponding filter in-order.</p>
 		</div>
@@ -141,13 +154,13 @@
 			<p>The following <kbd>-O</kbd> arguments are accepted:</p>
 			<dl>
 				<dt><kbd>indent</kbd>=<var>indent</var></dt>
-				<dd>The left margin for normal text is set to <var>indent</var> blank characters instead of the default of five for <a href="man://mdoc/7">mdoc(7)</a> and seven for <a href="man://man/7">man(7)</a>. Increasing this is not recommended; it may result in degraded formatting, for example overfull lines or ugly line breaks. When output is to a pager on a terminal that is less than 66 columns wide, the default is reduced to three columns.</dd>
+				<dd><p>The left margin for normal text is set to <var>indent</var> blank characters instead of the default of five for <a href="man://mdoc/7">mdoc(7)</a> and seven for <a href="man://man/7">man(7)</a>. Increasing this is not recommended; it may result in degraded formatting, for example overfull lines or ugly line breaks. When output is to a pager on a terminal that is less than 66 columns wide, the default is reduced to three columns.</p></dd>
 
 				<dt><kbd>mdoc</kbd></dt>
-				<dd>Format <a href="man://man/7">man(7)</a> input files in <a href="man://mdoc/7">mdoc(7)</a> output style. Specifically, this suppresses the two additional blank lines near the top and the bottom of each page, and it implies <kbd>-O indent</kbd>=<code>5</code>. One useful application is for checking that <kbd>-T man</kbd> output formats in the same way as the <a href="man://mdoc/7">mdoc(7)</a> source it was generated from.</dd>
+				<dd><p>Format <a href="man://man/7">man(7)</a> input files in <a href="man://mdoc/7">mdoc(7)</a> output style. Specifically, this suppresses the two additional blank lines near the top and the bottom of each page, and it implies <kbd>-O indent</kbd>=<code>5</code>. One useful application is for checking that <kbd>-T man</kbd> output formats in the same way as the <a href="man://mdoc/7">mdoc(7)</a> source it was generated from.</p></dd>
 
 				<dt><kbd>width</kbd>=<var>width</var></dt>
-				<dd>The output width is set to <var>width</var> instead of the default of 78. When output is to a pager on a terminal that is less than 79 columns wide, the default is reduced to one less than the terminal width. In any case, lines that are output in literal mode are never wrapped and may exceed the output width.</dd>
+				<dd><p>The output width is set to <var>width</var> instead of the default of 78. When output is to a pager on a terminal that is less than 79 columns wide, the default is reduced to one less than the terminal width. In any case, lines that are output in literal mode are never wrapped and may exceed the output width.</p></dd>
 			</dl>
 		</div>
 
@@ -159,16 +172,16 @@
 			<p>The following <kbd>-O</kbd> arguments are accepted:</p>
 			<dl>
 				<dt><kbd>fragment</kbd></dt>
-				<dd>Omit the <code>&lt;!DOCTYPE&gt;</code> declaration and the <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, and <code>&lt;body&gt;</code> elements and only emit the subtree below the <code>&lt;body&gt;</code> element. The style argument will be ignored. This is useful when embedding manual content within existing documents.</dd>
+				<dd><p>Omit the <code>&lt;!DOCTYPE&gt;</code> declaration and the <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, and <code>&lt;body&gt;</code> elements and only emit the subtree below the <code>&lt;body&gt;</code> element. The style argument will be ignored. This is useful when embedding manual content within existing documents.</p></dd>
 			
 				<dt><kbd>includes</kbd>=<var>fmt</var></dt>
-				<dd>The string <var>fmt</var>, for example, <code>../src/%I.html</code>, is used as a template for linked header files (usually via the <abbr><code>In</code></abbr> macro). Instances of <code>%I</code> are replaced with the include filename. The default is not to present a hyperlink.</dd>
+				<dd><p>The string <var>fmt</var>, for example, <code>../src/%I.html</code>, is used as a template for linked header files (usually via the <abbr><code>In</code></abbr> macro). Instances of <code>%I</code> are replaced with the include filename. The default is not to present a hyperlink.</p></dd>
 
 				<dt><kbd>man</kbd>=<var>fmt</var></dt>
-				<dd>The string <var>fmt</var>, for example, <code>../html%S/%N.%S.html</code>, is used as a template for linked manuals (usually via the <abbr><code>Xr</code></abbr> macro). Instances of <code>%N</code> and <code>%S</code> are replaced with the linked manual&rsquo;s name and section, respectively. If no section is included, section 1 is assumed. The default is not to present a hyperlink.</dd>
+				<dd><p>The string <var>fmt</var>, for example, <code>../html%S/%N.%S.html</code>, is used as a template for linked manuals (usually via the <abbr><code>Xr</code></abbr> macro). Instances of <code>%N</code> and <code>%S</code> are replaced with the linked manual&rsquo;s name and section, respectively. If no section is included, section 1 is assumed. The default is not to present a hyperlink.</p></dd>
 
 				<dt><kbd>style</kbd>=<var>style.css</var></dt>
-				<dd>The file <var>style.css</var> is used for an external style-sheet. This must be a valid absolute or relative URI.</dd>
+				<dd><p>The file <var>style.css</var> is used for an external style-sheet. This must be a valid absolute or relative URI.</p></dd>
 			</dl>
 		</div>
 
@@ -204,7 +217,7 @@
 			<p>The following <kbd>-O</kbd> arguments are accepted:</p>
 			<dl>
 				<dt><kbd>paper</kbd>=<var>name</var></dt>
-				<dd>The paper size <var>name</var> may be one of <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>legal</code>, or <code>letter</code>. You may also manually specify dimensions as <code><abbr>NNxNN</abbr></code>, width by height in millimetres. If an unknown value is encountered, <code>letter</code> is used.</dd>
+				<dd><p>The paper size <var>name</var> may be one of <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>legal</code>, or <code>letter</code>. You may also manually specify dimensions as <code><abbr>NNxNN</abbr></code>, width by height in millimetres. If an unknown value is encountered, <code>letter</code> is used.</p></dd>
 			</dl>
 		</div>
 
